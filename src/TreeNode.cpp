@@ -6,6 +6,28 @@ TreeNode::TreeNode(){
     return;
 }
 
+void TreeNode::resetData(Board board, int selfColor, int opponentColor, int selfBudget, int opponentBudget, TreeNode *parent){
+    // clean and set some data to the given ones
+    // designed to be called once after reuse an instance from the object pool
+    
+    for (int i = 0; i < BOARD_SIZE; i++){
+        for (int j = 0; j < BOARD_SIZE; j++){
+            this->board[i][j] = board[i][j];
+        }
+    }
+
+    this->selfColor = selfColor;
+    this->opponentColor = opponentColor;
+    this->selfBudget = selfBudget;
+    this->opponentBudget = opponentBudget;
+    this->parent = parent;
+    this->visits = 0;
+    this->value = 0;
+    this->child.clear();
+
+    return;
+}
+
 void TreeNode::setValidMoves(){
     // Clear `validMoves` and set it to a vector of valid moves
     validMoves.clear();

@@ -48,6 +48,8 @@ public:
     void setValidMoves();
     void step(const Move&);
 
+
+    void resetData(Board, int, int, int, int, TreeNode*);
     // ~TreeNode();
 
 };
