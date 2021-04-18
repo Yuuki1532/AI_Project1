@@ -68,3 +68,9 @@ void TreeNode::setValidMoves(){
 
     return;
 }
+
+void TreeNode::step_(Board& board, const Move& move){
+    // step the board inplace, move must guarenteed to be legal
+
+    return;
+}
