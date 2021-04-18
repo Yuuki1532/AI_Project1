@@ -4,11 +4,14 @@
 #include <vector>
 #include <utility>
 
-// 0: empty, 1: black flag, 2: white flag, 3: black pieces,
-//                  // 4: white pieces, 5: black barriers, 6: white barriers
+#define BOARD_SIZE 9
 
+#define FIXED_COST 1
 #define SELF_BARRIER_COST -3
 #define OPPONENT_BARRIER_COST 3
+
+const int color_black = 0;
+const int color_white = 1;
 
 const int chessType_empty = 0;
 const int chessType_blackFlag = 1;
@@ -18,26 +21,32 @@ const int chessType_whitePiece = 4;
 const int chessType_blackBarrier = 5;
 const int chessType_whiteBarrier = 6;
 
+const std::pair<int, int> chess_moveDirection[] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+
+struct Move{
+    int i1, j1, i2, j2; // // (i1, j1): old position, (i2, j2): new position
+    Move(int i1, int j1, int i2, int j2): i1(i1), j1(j1), i2(i2), j2(j2){}
+};
 
 typedef std::vector<std::vector<int> > Board;
-typedef std::pair<int, int> Move;
 
 class TreeNode{
 public:
     Board board;
-    int budget;
+    int selfBudget, opponentBudget;
+    int selfColor, opponentColor;
     TreeNode *parent;
     std::vector<TreeNode*> child; // child
     std::vector<Move> validMoves; // valid moves
     
-    // bool isEnd; // indicate whether the state is of an ended game
-    bool blacksTurn; // indicate whether the next move should be taken by black
+    
     int visits; // visits count of the state
     int value; // value of the state
 
     TreeNode();
 
-    std::vector<Move> getValidMoves();
+
+    void setValidMoves();
 
 
     // ~TreeNode();
