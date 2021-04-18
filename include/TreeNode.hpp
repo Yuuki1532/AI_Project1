@@ -39,14 +39,14 @@ public:
     std::vector<TreeNode*> child; // child
     std::vector<Move> validMoves; // valid moves
     
-    int visits; // visits count of the state
-    int value; // value of the state
+    int visits; // visit count of node
+    int value; // value of node
 
     TreeNode();
 
 
     void setValidMoves();
-    void step_(Board&, const Move&);
+    void step(const Move&);
 
     // ~TreeNode();
 

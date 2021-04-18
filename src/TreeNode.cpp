@@ -6,21 +6,6 @@ TreeNode::TreeNode(){
     return;
 }
 
-// inline bool TreeNode::validateMove(int i1, int j1, int i2, int j2){
-//     // check whether a move is valid
-//     // (i1, j1): old position
-//     // (i2, j2): new position
-//     if (board[i1][j1] != selfColor) // a valid move must start from a self soldier
-//         return false;
-//     if (i1 < 0 || i1 >= 9 || j1 < 0 || j1 >= 9
-//         || i2 < 0 || i2 >= 9 || j2 < 0 || j2 >= 9) // index out of range
-//         return false;
-
-
-
-//     return true;
-// }
-
 void TreeNode::setValidMoves(){
     // Clear `validMoves` and set it to a vector of valid moves
     validMoves.clear();
@@ -69,8 +54,24 @@ void TreeNode::setValidMoves(){
     return;
 }
 
-void TreeNode::step_(Board& board, const Move& move){
-    // step the board inplace, move must guarenteed to be legal
+void TreeNode::step(const Move& move){
+    // step current node by `move`
+    // states related to the game, i.e. `board`, `selfBudget`, `opponentBudget` will be update inplace
+    // move must guarenteed to be legal
+
+    board[move.i1][move.j1] = chessType_empty;
+    
+    selfBudget -= FIXED_COST + (move.i2 - move.i1) + (move.j2 - move.j1);
+
+    if (board[move.i2][move.j2] == chessType_blackBarrier + selfColor) // break self barrier
+        selfBudget -= SELF_BARRIER_COST;
+    else if (board[move.i2][move.j2] == chessType_blackBarrier + opponentColor) // break opponent barrier
+        selfBudget -= OPPONENT_BARRIER_COST;
+
+    board[move.i2][move.j2] = chessType_blackPiece + selfColor;
+    
+    std::swap(selfColor, opponentColor);
+    std::swap(selfBudget, opponentBudget);
 
     return;
 }
