@@ -1,12 +1,6 @@
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(){
-    board = std::vector<std::vector<int> >(BOARD_SIZE, std::vector<int>(BOARD_SIZE, 0));
-    validMoves = std::vector<Move>();
-    return;
-}
-
-void TreeNode::resetData(Board board, int selfColor, int opponentColor, int selfBudget, int opponentBudget, TreeNode *parent){
+void TreeNode::resetData(const Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget, TreeNode *parent){
     // clean and set some data to the given ones
     // designed to be called once after reuse an instance from the object pool
     
@@ -15,7 +9,7 @@ void TreeNode::resetData(Board board, int selfColor, int opponentColor, int self
             this->board[i][j] = board[i][j];
         }
     }
-
+    
     this->selfColor = selfColor;
     this->opponentColor = opponentColor;
     this->selfBudget = selfBudget;

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <utility>
+#include <functional>
+#include <random>
 
 #define BOARD_SIZE 9
 
@@ -32,25 +34,33 @@ typedef std::vector<std::vector<int> > Board;
 
 class TreeNode{
 public:
-    Board board;
+    Board board = Board(BOARD_SIZE, std::vector<int>(BOARD_SIZE, 0));
+    
     int selfBudget, opponentBudget;
     int selfColor, opponentColor;
+    
     TreeNode *parent;
     std::vector<TreeNode*> child; // child
     std::vector<Move> validMoves; // valid moves
     
-    int visits; // visit count of node
-    int value; // value of node
+    int value; // value of the node
+    // `value` of the node is w.r.t to `parent`
+    // e.g. `value` = 10 implies
+    // the value for `parent` to take a specific action thus reaching the node is 10
 
-    TreeNode();
+    int visits; // visit count of the node
+    
 
 
     void setValidMoves();
     void step(const Move&);
+    
+    
 
-
-    void resetData(Board, int, int, int, int, TreeNode*);
+    void resetData(const Board&, int, int, int, int, TreeNode*);
     // ~TreeNode();
+
+
 
 };
 

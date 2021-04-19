@@ -3,10 +3,9 @@
 
 class SearchTree{
 public:
-    SearchTree(Board, int, int, int, int);
+    SearchTree(Board&, int, int, int, int);
 
     Move search();
-
 
 
     ~SearchTree();
@@ -17,10 +16,19 @@ private:
     TreeNode *root;
     int nodesExpanded = 0;
 
+    // random number generation related
+    std::random_device rd;
+    std::mt19937 gen = std::mt19937(rd());
+    std::uniform_int_distribution<int> dist;
+    int randInt(int, int);
 
-    TreeNode* select();
-    // ? expand(TreeNode *leaf);
-    //int rollout(TreeNode *leaf);
-    // void update(TreeNode* leaf, int winner);
+
+    double getTreeNodeWeight(const TreeNode* const&) const;
+
+    // MCTS operations
+    TreeNode* select() const;
+    int expand(TreeNode*);
+    int rollout(TreeNode*);
+    void update(TreeNode*, int);
 
 };
