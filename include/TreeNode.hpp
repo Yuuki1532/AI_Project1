@@ -27,6 +27,7 @@ const std::pair<int, int> chess_moveDirection[] = {{0, -1}, {0, 1}, {-1, 0}, {1,
 
 struct Move{
     int i1, j1, i2, j2; // // (i1, j1): old position, (i2, j2): new position
+    Move(){}
     Move(int i1, int j1, int i2, int j2): i1(i1), j1(j1), i2(i2), j2(j2){}
 };
 

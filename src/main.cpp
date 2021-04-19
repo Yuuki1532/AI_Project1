@@ -75,8 +75,8 @@ public:
             for (int i = 0; i < 4; ++i)
                 cin >> ret[i];
             
-            // SearchTree MCTS(board, !color);
-            // auto step = MCTS.step();
+            // SearchTree MCTS(?);
+            // auto move = MCTS.search(30);
             // return step;
         }
         return ret;

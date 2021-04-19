@@ -8,7 +8,7 @@ class SearchTree{
 public:
     SearchTree(Board&, int, int, int, int);
 
-    Move search();
+    Move search(int);
 
     ~SearchTree();
 
@@ -22,7 +22,7 @@ private:
     std::random_device rd;
     std::mt19937 gen = std::mt19937(rd());
     std::uniform_int_distribution<int> dist;
-    Move getTreeNodeRandomMove(const TreeNode*);
+    int randomInt(const int, const int);
 
     double getTreeNodeWeight(const TreeNode* const&) const; // selection strategy
     void recycleTreeNodes(TreeNode*);

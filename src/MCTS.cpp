@@ -1,5 +1,6 @@
 #include "MCTS.hpp"
 #include <cmath>
+#include <chrono>
 
 SearchTree::SearchTree(Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget){
     // TODO: ask TAs for RAM limitation in execute environment
@@ -23,12 +24,9 @@ double SearchTree::getTreeNodeWeight(const TreeNode* const& treeNode) const{
     return treeNode->value / treeNode->visits + std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits) / treeNode->visits);
 }
 
-Move SearchTree::getTreeNodeRandomMove(const TreeNode *node){
-    // generate a random nubmer uniformly distributed in [0, node->validMoves.size() - 1] by RNG `gen`
-    // and return the correspoding move
-    // node->validMoves must guaranteed to have at least one element
-    int randomIndex = dist(gen, std::uniform_int_distribution<int>::param_type(0, node->validMoves.size() - 1));
-    return node->validMoves[randomIndex];
+int SearchTree::randomInt(const int min, const int max){
+    // generate a random nubmer uniformly distributed in [min, max] by RNG `gen`
+    return dist(gen, std::uniform_int_distribution<int>::param_type(min, max));
 }
 
 TreeNode* SearchTree::select() const{
@@ -111,7 +109,8 @@ int SearchTree::rollout(TreeNode* leaf){
         }
 
         // play randomly
-        const auto& randomMove = getTreeNodeRandomMove(simulateNode);
+        int randomIndex = randomInt(0, simulateNode->validMoves.size() - 1);
+        const auto& randomMove = simulateNode->validMoves[randomIndex];
         simulateNode->step(randomMove);
     }
 
@@ -162,6 +161,52 @@ SearchTree::~SearchTree(){
     return;
 }
 
-Move SearchTree::search(){
+Move SearchTree::search(int _timeLimit){
+    // search for a best move with `_timeLimit` seconds limitation
     // TODO
+    std::chrono::seconds timeLimit(_timeLimit); // duration
+    
+    nodesExpanded = 0;
+    int iters = 0;
+
+    root->setValidMoves();
+    if (root->validMoves.empty()){
+        return Move(-1, -1, -1, -1);
+    }
+
+    // simulate until time limit
+    while (1){
+        iters++;
+
+        auto leaf = select();
+        if (leaf->visits > 0){ // visited, expand it and randomly pick one of its child if any
+            if (expand(leaf)){
+                int randomIndex = randomInt(0, leaf->child.size() - 1);
+                leaf = leaf->child[randomIndex];
+            }
+        }
+
+        int winner = rollout(leaf);
+        update(leaf, winner);
+    }
+
+    // find the best node
+    double maxWeight = -1e9;
+    int valueOfBestNode;
+    int visitsOfBestNode;
+    Move bestMove;
+
+    for (int i = 0; i < root->validMoves.size(); i++){
+        double currentWeight = 1.0 * root->child[i]->value / root->child[i]->visits;
+        
+        if (currentWeight > maxWeight) {
+            maxWeight = currentWeight;
+            bestMove = root->validMoves[i];
+            valueOfBestNode = root->child[i]->value;
+            visitsOfBestNode = root->child[i]->visits;
+        }
+    }
+
+    return bestMove;
 }
+
