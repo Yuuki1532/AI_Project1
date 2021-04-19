@@ -51,17 +51,13 @@ public:
     int visits; // visit count of the node
     
 
-
     void setValidMoves();
     void step(const Move&);
-    
+    int getWinner() const;
     
 
     void resetData(const Board&, int, int, int, int, TreeNode*);
-    // ~TreeNode();
-
-
-
+    
 };
 
 #endif

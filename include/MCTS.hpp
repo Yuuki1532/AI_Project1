@@ -1,3 +1,6 @@
+#ifndef MCTS_SEARCH_TREE_H
+#define MCTS_SEARCH_TREE_H
+
 #include "TreeNode.hpp"
 #include "ObjectPool.hpp"
 
@@ -6,7 +9,6 @@ public:
     SearchTree(Board&, int, int, int, int);
 
     Move search();
-
 
     ~SearchTree();
 
@@ -20,15 +22,16 @@ private:
     std::random_device rd;
     std::mt19937 gen = std::mt19937(rd());
     std::uniform_int_distribution<int> dist;
-    int randInt(int, int);
+    Move getTreeNodeRandomMove(const TreeNode*);
 
-
-    double getTreeNodeWeight(const TreeNode* const&) const;
+    double getTreeNodeWeight(const TreeNode* const&) const; // selection strategy
+    void recycleTreeNodes(TreeNode*);
 
     // MCTS operations
     TreeNode* select() const;
     int expand(TreeNode*);
     int rollout(TreeNode*);
     void update(TreeNode*, int);
-
 };
+
+#endif

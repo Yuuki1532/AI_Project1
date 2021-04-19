@@ -26,6 +26,11 @@ void TreeNode::setValidMoves(){
     // Clear `validMoves` and set it to a vector of valid moves
     validMoves.clear();
     
+    if (board[0][4] != chessType_whiteFlag || board[8][4] != chessType_blackFlag) // flag has been taken
+        return;
+    if (selfBudget <= FIXED_COST) // early stop when no move can be taken
+        return;
+
     for (int i = 0; i < BOARD_SIZE; i++){
         for (int j = 0; j < BOARD_SIZE; j++){
             // a valid move must start from a self soldier
@@ -46,6 +51,8 @@ void TreeNode::setValidMoves(){
                     
                     bool isHindered = false; // indicates whether the loop should break directly after current check
                     if (board[r][c] == chessType_blackPiece + selfColor) // hindered by self soldier
+                        break;
+                    if (board[r][c] == chessType_blackFlag + selfColor) // hindered by self flag
                         break;
                     if (board[r][c] != chessType_empty)
                         isHindered = true;
@@ -90,4 +97,50 @@ void TreeNode::step(const Move& move){
     std::swap(selfBudget, opponentBudget);
 
     return;
+}
+
+int TreeNode::getWinner() const{
+    // `this` must guaranteed to have no more valid moves for both player
+    // find the winner according to the rule
+
+    if (board[0][4] != chessType_whiteFlag) // position of white flag
+        return color_black; // black win
+    if (board[8][4] != chessType_blackFlag) // position of black flag
+        return color_white; // white win
+    
+    // count pieces
+    int blackSoldiers = 0, whiteSoldiers = 0, blackBarriers = 0, whiteBarriers = 0;
+    for (int i = 0; i < BOARD_SIZE; i++){
+        for (int j = 0; j < BOARD_SIZE; j++){
+            switch (board[i][j]){
+                case chessType_blackPiece:
+                    blackSoldiers++;
+                    break;
+                case chessType_whitePiece:
+                    whiteSoldiers++;
+                    break;
+                case chessType_blackBarrier:
+                    blackBarriers++;
+                    break;
+                case chessType_whiteBarrier:
+                    whiteBarriers++;
+                    break;
+            }
+        }
+    }
+    
+    // 1. player with the most remaining soldiers win
+    if (blackSoldiers > whiteSoldiers)
+        return color_black;
+    if (whiteSoldiers > blackSoldiers)
+        return color_white;
+    
+    // 2. player with the most remaining barriers win
+    if (blackBarriers > whiteBarriers)
+        return color_black;
+    if (whiteBarriers > blackBarriers)
+        return color_white;
+    
+    // 3. draw
+    return -1;
 }

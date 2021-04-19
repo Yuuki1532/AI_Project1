@@ -23,9 +23,12 @@ double SearchTree::getTreeNodeWeight(const TreeNode* const& treeNode) const{
     return treeNode->value / treeNode->visits + std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits) / treeNode->visits);
 }
 
-int SearchTree::randInt(int min, int max){
-    // generate a random nubmer uniformly distributed in [min, max] by RNG `gen`
-    return dist(gen, std::uniform_int_distribution<int>::param_type(min, max));
+Move SearchTree::getTreeNodeRandomMove(const TreeNode *node){
+    // generate a random nubmer uniformly distributed in [0, node->validMoves.size() - 1] by RNG `gen`
+    // and return the correspoding move
+    // node->validMoves must guaranteed to have at least one element
+    int randomIndex = dist(gen, std::uniform_int_distribution<int>::param_type(0, node->validMoves.size() - 1));
+    return node->validMoves[randomIndex];
 }
 
 TreeNode* SearchTree::select() const{
@@ -81,10 +84,40 @@ int SearchTree::expand(TreeNode *leaf) {
     return leaf->validMoves.size();
 }
 
-// int SearchTree::rollout(TreeNode* leaf){
+int SearchTree::rollout(TreeNode* leaf){
+    // rollout `leaf` and return the winner
 
+    // make a copy of `leaf` for simulation
+    auto simulateNode = pool.pop();
+    simulateNode->resetData(leaf->board, leaf->selfColor, leaf->opponentColor, leaf->selfBudget, leaf->opponentBudget, nullptr);
+    
+    while (1){ // play randomly until game ends
+        
+        // set valid moves
+        simulateNode->setValidMoves();
+        if (simulateNode->validMoves.empty()){ // check if opponent has any valid move
+            std::swap(simulateNode->selfColor, simulateNode->opponentColor);
+            std::swap(simulateNode->selfBudget, simulateNode->opponentBudget);
+            
+            simulateNode->setValidMoves();
 
-// }
+            if (simulateNode->validMoves.empty()){ // both players have no valid moves
+                // find winner
+                int winner = simulateNode->getWinner();
+                pool.push(simulateNode); // recycle simulateNode
+                return winner;
+            }
+            
+        }
+
+        // play randomly
+        const auto& randomMove = getTreeNodeRandomMove(simulateNode);
+        simulateNode->step(randomMove);
+    }
+
+    pool.push(simulateNode); // recycle simulateNode
+    return -1; // error (to avoid having a servere runtime error, we treat this unexpected error as draw)
+}
 
 void SearchTree::update(TreeNode* current, int winner){
     // backpropagate the (rollout) result
@@ -113,4 +146,22 @@ void SearchTree::update(TreeNode* current, int winner){
         update(current->parent, winner);
 
     return;
+}
+
+void SearchTree::recycleTreeNodes(TreeNode *node){
+    // push the whole tree nodes used back to the pool by DFS traversal
+    for (auto c: node->child){
+        recycleTreeNodes(c);
+    }
+    pool.push(node);
+    return;
+}
+
+SearchTree::~SearchTree(){
+    recycleTreeNodes(root);
+    return;
+}
+
+Move SearchTree::search(){
+    // TODO
 }
