@@ -38,10 +38,10 @@ void TreeNode::setValidMoves(){
             if (board[i][j] != chessType_blackPiece + selfColor)
                 continue;
             
-            int r = i, c = j; // (r, c): new position, starting from (i, j)
-
             // find valid moves which move self soldier at (i, j)
-            for (auto& d: chess_moveDirection){ // try all 4 directions    
+            for (auto& d: chess_moveDirection){ // try all 4 directions
+                int r = i, c = j; // (r, c): new position, starting from (i, j)
+                
                 while (1){
                     r += d.first;
                     c += d.second;

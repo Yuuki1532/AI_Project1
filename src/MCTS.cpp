@@ -10,13 +10,6 @@ SearchTree::SearchTree(Board& board, int selfColor, int opponentColor, int selfB
     // assume we cannot occupied large memory when idling
     // we must build the object pool here
     
-    // time the construction of pool
-    auto startTime = std::chrono::steady_clock::now(); // start time
-    pool = ObjectPool<TreeNode>();
-    std::cout << "\tConstructed object pool with " << pool.initObjCount << " objects in: "
-              << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
-              << "\n";
-
     // first create root node according to the given game status (parameters)
     root = pool.pop();
     root->resetData(board, selfColor, opponentColor, selfBudget, opponentBudget, nullptr);
@@ -185,7 +178,12 @@ Move SearchTree::search(int _timeLimit){
     }
 
     // simulate until time limit
-    while (std::chrono::steady_clock::now() - startTime < timeLimit){
+    //while (std::chrono::steady_clock::now() - startTime < timeLimit){
+    while (1){
+        if (iters % 10000 == 0)
+            if (std::chrono::steady_clock::now() - startTime >= timeLimit)
+                break;
+        
         iters++;
 
         auto leaf = select();
@@ -201,19 +199,31 @@ Move SearchTree::search(int _timeLimit){
     }
 
     // find the best node
-    double maxWeight = -1e9;
-    int valueOfBestNode;
-    int visitsOfBestNode;
+    //double maxWeight = -1e9;
+    int valueOfBestNode = -1e9;
+    int visitsOfBestNode = -1e9;
     Move bestMove;
 
     for (unsigned int i = 0; i < root->validMoves.size(); i++){
-        double currentWeight = 1.0 * root->child[i]->value / root->child[i]->visits;
+        //double currentWeight = 1.0 * root->child[i]->value / root->child[i]->visits;
         
-        if (currentWeight > maxWeight) {
-            maxWeight = currentWeight;
+        // if (currentWeight > maxWeight) {
+        //     maxWeight = currentWeight;
+        //     bestMove = root->validMoves[i];
+        //     valueOfBestNode = root->child[i]->value;
+        //     visitsOfBestNode = root->child[i]->visits;
+        // }
+        if (root->child[i]->visits > visitsOfBestNode){
             bestMove = root->validMoves[i];
-            valueOfBestNode = root->child[i]->value;
             visitsOfBestNode = root->child[i]->visits;
+            valueOfBestNode = root->child[i]->value;
+        }
+        else if (root->child[i]->visits == visitsOfBestNode){
+            if (root->child[i]->value > valueOfBestNode){
+                bestMove = root->validMoves[i];
+                visitsOfBestNode = root->child[i]->visits;
+                valueOfBestNode = root->child[i]->value;
+            }
         }
     }
 
@@ -221,9 +231,9 @@ Move SearchTree::search(int _timeLimit){
     std::cout << ((root->selfColor == color_black)? "Black": "White") << "'s turn"
               << "\tTime: " << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
               << "\nNodes expanded: " << nodesExpanded << "\tIters: " << iters
-              << "\nCurrent board winrate: " << 1.0 * root->value / root->visits << "(" << root->value << "/" << root->visits << ")"
-              << "\nBest move weight: " << maxWeight << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
-              << "\n";
+              //<< "\nBest move weight: " << maxWeight << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
+              << "\nMax visits: " << visitsOfBestNode << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
+              << std::endl;
 
     return bestMove;
 }

@@ -43,6 +43,17 @@ public:
             = board[3][2] = board[3][3] = board[3][4] = board[3][5] = board[3][6] = 6;
         board[8][3] = board[8][5] = board[7][1] = board[7][4] = board[7][7] = board[6][1] = board[6][7]
             = board[5][2] = board[5][3] = board[5][4] = board[5][5] = board[5][6] = 5;
+        
+        // board = vector<vector<int> >
+        // {vector<int>{4, 4, 0, 6, 2, 4, 0, 0, 0},
+        // vector<int>{4, 4, 0, 0, 0, 0, 0, 6, 0},
+        // vector<int>{3, 0, 0, 0, 0, 0, 0, 6, 0},
+        // vector<int>{0, 0, 6, 6, 6, 6, 6, 0, 0},
+        // vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},
+        // vector<int>{0, 0, 0, 5, 5, 5, 5, 0, 0},
+        // vector<int>{0, 5, 0, 3, 3, 0, 0, 5, 0},
+        // vector<int>{0, 5, 3, 3, 5, 0, 0, 5, 0},
+        // vector<int>{0, 0, 0, 5, 1, 5, 0, 0, 0}};
     }
 
     ~Meichu() {
@@ -67,68 +78,71 @@ public:
         /* You should modify this function! */
         /************************************/
         // return format: {begin_x, begin_y, end_x, end_y}
-        vector<int> ret(4, 0);
-        if (who == color) {
-            cout << "My move:\n";
-            // Use AI to make decision !
-            // cin is only for testing !
-            // for (int i = 0; i < 4; ++i)
-            //     cin >> ret[i];
-            
-            SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-            auto move = MCTS.search(10);
-            return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
-        }
-        return ret;
+        // vector<int> ret(4, 0);
+        // if (who == color) {
+        // cout << "My move:\n";
+        // Use AI to make decision !
+        // cin is only for testing !
+        // for (int i = 0; i < 4; ++i)
+        //     cin >> ret[i];
+        
+        SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
+        Move move = MCTS.search(15);
+        return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
+
+        // }
+        // return ret;
     }
 
     void start() {
     	// bid for black or white
         // please set "bid" function by yourself
         // bid function will return two <int> values
-        auto bid_res = bid();
-        bool color_choice = bid_res.first;
-        int price = min(bid_res.second, MAX_PRICE);
-        bool opponent_color_choice;
-        int opponent_price;
-        // color -> BLACK:0  WHITE:1
-        cout << "Please input opponent_color_choice: "; 
-        cin >> opponent_color_choice;
-        cout << "Please input opponent_price: "; 
-        cin >> opponent_price;
-        if ((color_choice != 0 && color_choice != 1) ||
-            (opponent_color_choice != 0 && opponent_color_choice != 1)) {
-                cout << "Invalid color choice." << endl;
-                exit(0);
-            }
+        // auto bid_res = bid();
+        // bool color_choice = bid_res.first;
+        // int price = min(bid_res.second, MAX_PRICE);
+        // bool opponent_color_choice;
+        // int opponent_price;
+        // // color -> BLACK:0  WHITE:1
+        // cout << "Please input opponent_color_choice: "; 
+        // cin >> opponent_color_choice;
+        // cout << "Please input opponent_price: "; 
+        // cin >> opponent_price;
+        // if ((color_choice != 0 && color_choice != 1) ||
+        //     (opponent_color_choice != 0 && opponent_color_choice != 1)) {
+        //         cout << "Invalid color choice." << endl;
+        //         exit(0);
+        //     }
 
-        if (color_choice != opponent_color_choice) {
-        	cout << "Case 1 : different color \n";
-            color = color_choice;
-        } else if (price > opponent_price) {
-        	cout << "Case 2 : same color, I win \n";
-            color = color_choice;
-            budgets[color] -= max(0, opponent_price)+1;
-        } else if (price < opponent_price) {
-        	cout << "Case 3 : same color, I lose \n";
-            color = !color_choice;
-            budgets[!color] -= max(0, price)+1;
-        } else {
-            cout << "Tie!\n" << "Set my player color manually: ";
-            cin >> color;
-            if(color == color_choice)
-                budgets[color] -= max(0, opponent_price)+1;
-            else
-                budgets[!color] -= max(0, price)+1;
-        }
+        // if (color_choice != opponent_color_choice) {
+        // 	cout << "Case 1 : different color \n";
+        //     color = color_choice;
+        // } else if (price > opponent_price) {
+        // 	cout << "Case 2 : same color, I win \n";
+        //     color = color_choice;
+        //     budgets[color] -= max(0, opponent_price)+1;
+        // } else if (price < opponent_price) {
+        // 	cout << "Case 3 : same color, I lose \n";
+        //     color = !color_choice;
+        //     budgets[!color] -= max(0, price)+1;
+        // } else {
+        //     cout << "Tie!\n" << "Set my player color manually: ";
+        //     cin >> color;
+        //     if(color == color_choice)
+        //         budgets[color] -= max(0, opponent_price)+1;
+        //     else
+        //         budgets[!color] -= max(0, price)+1;
+        // }
 
-        cout << "My color is: ";
-        cout << (color == BLACK ? "BLACK" : "WHITE") << "\n";
+        // cout << "My color is: ";
+        // cout << (color == BLACK ? "BLACK" : "WHITE") << "\n";
 
-        int step = 0;
+        int step = 1;
+        int rounds = 0;
         while (!game_over) {
             show_board();
 
+            cout << "[#" << rounds + 1 << "] ";
             if (step % 2 == BLACK) { // black's turn
 
                 if (budgets[BLACK] <= 1) {
@@ -136,20 +150,21 @@ public:
                     ++step;
                     continue;
                 }
-                if (color==BLACK) {
-                    cout << "My color is BLACK and this is my turn:\n";
-                    vector<int> move = make_decision(BLACK);
-                    cout << "Move (" << move[0] << ", " << move[1] << ") to ("
-                        << move[2] << ", " << move[3] << ").\n";
-                    make_move(BLACK, move);
-                } else {
-                    cout << "Now it's opponent(BLACK)'s turn:\n";
-                    vector<int> move(4);
-                    cout << "Enter the opponent's move: ";
-                    cin >> move[0] >> move[1] >> move[2] >> move[3];
-                    make_move(BLACK, move);
-                }
+                // if (color==BLACK) {
+                cout << "My color is BLACK and this is my turn:\n";
+                vector<int> move = make_decision(BLACK);
+                cout << "Move (" << move[0] << ", " << move[1] << ") to ("
+                    << move[2] << ", " << move[3] << ").\n";
+                make_move(BLACK, move);
+                // } else {
+                //     cout << "Now it's opponent(BLACK)'s turn:\n";
+                //     vector<int> move(4);
+                //     cout << "Enter the opponent's move: ";
+                //     cin >> move[0] >> move[1] >> move[2] >> move[3];
+                //     make_move(BLACK, move);
+                // }
                 ++step;
+                rounds++;
                 
 
             } else { // white's turn
@@ -159,24 +174,26 @@ public:
                     ++step;
                     continue;
                 }
-                if (color==WHITE) {
-                    cout << "My color is WHITE and this is my turn:\n";
-                    vector<int> move = make_decision(WHITE);
-                    cout << "Move (" << move[0] << ", " << move[1] << ") to ("
-                        << move[2] << ", " << move[3] << ").\n";
-                    make_move(WHITE, move);
-                } else {
-                    cout << "Now it's oppenent(WHITE)'s turn:\n";
-                    vector<int> move(4);
-                    cout << "Enter the opponent's move: ";
-                    cin >> move[0] >> move[1] >> move[2] >> move[3];
-                    make_move(WHITE, move);
-                }
+                // if (color==WHITE) {
+                cout << "My color is WHITE and this is my turn:\n";
+                vector<int> move = make_decision(WHITE);
+                cout << "Move (" << move[0] << ", " << move[1] << ") to ("
+                    << move[2] << ", " << move[3] << ").\n";
+                make_move(WHITE, move);
+                // } else {
+                //     cout << "Now it's oppenent(WHITE)'s turn:\n";
+                //     vector<int> move(4);
+                //     cout << "Enter the opponent's move: ";
+                //     cin >> move[0] >> move[1] >> move[2] >> move[3];
+                //     make_move(WHITE, move);
+                // }
                 ++step;
+                rounds++;
 
             }
 
         }
+        cout << "Game ended in " << rounds << " rounds\n";
         terminate();
     }
 

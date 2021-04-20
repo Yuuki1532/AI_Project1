@@ -8,7 +8,7 @@ SRCS = $(wildcard $(SRC)/*.cpp)
 OBJS = $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRCS))
 
 CC = g++
-CFLAGS = -std=c++14 -Wall -g
+CFLAGS = -std=c++14 -Wall -O3
 LIBS = -lm
 
 .PHONY: all clean
