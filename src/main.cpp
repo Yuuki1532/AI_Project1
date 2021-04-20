@@ -72,12 +72,12 @@ public:
             cout << "My move:\n";
             // Use AI to make decision !
             // cin is only for testing !
-            for (int i = 0; i < 4; ++i)
-                cin >> ret[i];
+            // for (int i = 0; i < 4; ++i)
+            //     cin >> ret[i];
             
-            // SearchTree MCTS(?);
-            // auto move = MCTS.search(30);
-            // return step;
+            SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
+            auto move = MCTS.search(10);
+            return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
         }
         return ret;
     }

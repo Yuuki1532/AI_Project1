@@ -1,12 +1,21 @@
 #include "MCTS.hpp"
 #include <cmath>
 #include <chrono>
+#include <iostream>
+#include <iomanip>
+#include <string>
 
 SearchTree::SearchTree(Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget){
     // TODO: ask TAs for RAM limitation in execute environment
     // assume we cannot occupied large memory when idling
     // we must build the object pool here
+    
+    // time the construction of pool
+    auto startTime = std::chrono::steady_clock::now(); // start time
     pool = ObjectPool<TreeNode>();
+    std::cout << "\tConstructed object pool with " << pool.initObjCount << " objects in: "
+              << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
+              << "\n";
 
     // first create root node according to the given game status (parameters)
     root = pool.pop();
@@ -164,6 +173,7 @@ SearchTree::~SearchTree(){
 Move SearchTree::search(int _timeLimit){
     // search for a best move with `_timeLimit` seconds limitation
     // TODO
+    auto startTime = std::chrono::steady_clock::now(); // start time
     std::chrono::seconds timeLimit(_timeLimit); // duration
     
     nodesExpanded = 0;
@@ -175,7 +185,7 @@ Move SearchTree::search(int _timeLimit){
     }
 
     // simulate until time limit
-    while (1){
+    while (std::chrono::steady_clock::now() - startTime < timeLimit){
         iters++;
 
         auto leaf = select();
@@ -196,7 +206,7 @@ Move SearchTree::search(int _timeLimit){
     int visitsOfBestNode;
     Move bestMove;
 
-    for (int i = 0; i < root->validMoves.size(); i++){
+    for (unsigned int i = 0; i < root->validMoves.size(); i++){
         double currentWeight = 1.0 * root->child[i]->value / root->child[i]->visits;
         
         if (currentWeight > maxWeight) {
@@ -206,6 +216,14 @@ Move SearchTree::search(int _timeLimit){
             visitsOfBestNode = root->child[i]->visits;
         }
     }
+
+    // output some statistics
+    std::cout << ((root->selfColor == color_black)? "Black": "White") << "'s turn"
+              << "\tTime: " << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
+              << "\nNodes expanded: " << nodesExpanded << "\tIters: " << iters
+              << "\nCurrent board winrate: " << 1.0 * root->value / root->visits << "(" << root->value << "/" << root->visits << ")"
+              << "\nBest move weight: " << maxWeight << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
+              << "\n";
 
     return bestMove;
 }

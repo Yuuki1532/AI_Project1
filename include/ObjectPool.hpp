@@ -3,17 +3,18 @@
 
 #include <stack>
 
-#define INIT_OBJ_COUNT 800000 // initial object count 800K
-#define AUG_OBJ_COUNT 200000 // object count for every augmentation 200K
+
 
 template <class T>
 class ObjectPool{
 public:
+    static const int initObjCount = 800000; // initial object count 800K
+    static const int augObjCount = 200000; // object count for every augmentation 200K
     std::stack<T*> pool;
     
     ObjectPool(){
         // create initial objects for pool
-        for (int i = 0; i < INIT_OBJ_COUNT; i++){
+        for (int i = 0; i < initObjCount; i++){
             pool.push(new T());
         }
         return;
@@ -30,7 +31,7 @@ public:
 
     T* pop(){
         if (pool.empty()){ // create objects if pool is empty
-            for (int i = 0; i < AUG_OBJ_COUNT; i++){
+            for (int i = 0; i < augObjCount; i++){
                 pool.push(new T());
             }
         }
