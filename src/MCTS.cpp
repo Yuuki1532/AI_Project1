@@ -188,7 +188,7 @@ Move SearchTree::search(int _timeLimit){
 
         auto leaf = select();
         if (leaf->visits > 0){ // visited, expand it and randomly pick one of its child if any
-            if (expand(leaf)){
+            if (expand(leaf) > 0){
                 int randomIndex = randomInt(0, leaf->child.size() - 1);
                 leaf = leaf->child[randomIndex];
             }

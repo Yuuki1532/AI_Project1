@@ -11,8 +11,9 @@
 
 using namespace std;
 // utf-8
-const string Horizon = "\u2f00";
-const string S[7] = {"  ", "\u25b2", "\u25b3", "\u25cf", "\u25cb", "\u25a0", "\u25a1"};
+// const string Horizon = "\u2f00";
+const string Horizon = "-";
+const string S[7] = {" ", "\u25b2", "\u25b3", "\u25cf", "\u25cb", "\u25a0", "\u25a1"};
 
 // Big-5
 // const string Horizon = "\xA1\x58";
@@ -87,7 +88,7 @@ public:
         //     cin >> ret[i];
         
         SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-        Move move = MCTS.search(15);
+        Move move = MCTS.search(10);
         return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
 
         // }
@@ -349,19 +350,20 @@ public:
             << "n_barriers:\n"
             << "        Black: " << n_barriers[BLACK] << "\n"
             << "        White: " << n_barriers[WHITE] << "\n\n"
-            << " y  0  1  2  3  4  5  6  7  8\n"
-            <<"x  ";
+            //<< " y  0  1  2  3  4  5  6  7  8\n"
+            << " y 0 1 2 3 4 5 6 7 8\n"
+            <<"x +";
         for (int i = 0; i < 9; ++i) {
-        	cout << Horizon << " ";
+        	cout << Horizon << "+";
 		}
         cout << endl;    
         for (int i = 0; i < 9; ++i) {
             cout << i << " |";
             for (int j = 0; j < 9; ++j)
                 cout << S[board[i][j]] << "|";
-            cout << endl << "   "; 
+            cout << endl << "  +"; 
             for (int j = 0; j < 9; ++j) {
-        	    cout << Horizon << " ";
+        	    cout << Horizon << "+";
 		    }
 		    cout << endl; 
         }

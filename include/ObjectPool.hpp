@@ -22,7 +22,7 @@ public:
         for (int i = 0; i < initObjCount; i++){
             pool.push(new T());
         }
-        std::cout << "Constructed object pool with " << initObjCount << " objects in: "
+        std::cout << "Constructed object pool with " << initObjCount << " objects in "
                   << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
                   << std::endl;
         return;
