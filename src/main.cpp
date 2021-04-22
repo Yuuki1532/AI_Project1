@@ -45,17 +45,7 @@ public:
         board[8][3] = board[8][5] = board[7][1] = board[7][4] = board[7][7] = board[6][1] = board[6][7]
             = board[5][2] = board[5][3] = board[5][4] = board[5][5] = board[5][6] = 5;
         
-        // board = vector<vector<int> >
-        // {vector<int>{4, 4, 0, 6, 2, 4, 0, 0, 0},
-        // vector<int>{4, 4, 0, 0, 0, 0, 0, 6, 0},
-        // vector<int>{3, 0, 0, 0, 0, 0, 0, 6, 0},
-        // vector<int>{0, 0, 6, 6, 6, 6, 6, 0, 0},
-        // vector<int>{0, 0, 0, 0, 0, 0, 0, 0, 0},
-        // vector<int>{0, 0, 0, 5, 5, 5, 5, 0, 0},
-        // vector<int>{0, 5, 0, 3, 3, 0, 0, 5, 0},
-        // vector<int>{0, 5, 3, 3, 5, 0, 0, 5, 0},
-        // vector<int>{0, 0, 0, 5, 1, 5, 0, 0, 0}};
-    }
+   }
 
     ~Meichu() {
         for (auto v : board) v.clear();
@@ -88,7 +78,7 @@ public:
         //     cin >> ret[i];
         
         SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-        Move move = MCTS.search(10);
+        Move move = MCTS.search(15);
         return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
 
         // }
@@ -138,7 +128,7 @@ public:
         // cout << "My color is: ";
         // cout << (color == BLACK ? "BLACK" : "WHITE") << "\n";
 
-        int step = 1;
+        int step = 0;
         int rounds = 0;
         while (!game_over) {
             show_board();
@@ -330,8 +320,8 @@ public:
     }
 
     void terminate() {
-        if (board[0][4] == 4) cout << "BLACK wins!" << endl;
-        else if (board[8][4] == 3) cout << "WHITE wins!" << endl;
+        if (board[0][4] == 3) cout << "BLACK wins!" << endl;
+        else if (board[8][4] == 4) cout << "WHITE wins!" << endl;
         else if (n_pieces[BLACK] > n_pieces[WHITE]) cout << "BLACK wins!" << endl;
         else if (n_pieces[BLACK] < n_pieces[WHITE]) cout << "WHITE wins!" << endl;
         else if (n_barriers[BLACK] > n_barriers[WHITE]) cout << "BLACK wins!" << endl;

@@ -23,7 +23,7 @@ double SearchTree::getTreeNodeWeight(const TreeNode* const& treeNode) const{
 
     if (treeNode->visits == 0)
         return std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits));
-    return treeNode->value / treeNode->visits + std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits) / treeNode->visits);
+    return 1.0 * treeNode->value / treeNode->visits + std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits) / treeNode->visits);
 }
 
 int SearchTree::randomInt(const int min, const int max){
@@ -231,8 +231,8 @@ Move SearchTree::search(int _timeLimit){
     std::cout << ((root->selfColor == color_black)? "Black": "White") << "'s turn"
               << "\tTime: " << std::setprecision(4) << std::chrono::duration<double>(std::chrono::steady_clock::now() - startTime).count() << " sec"
               << "\nNodes expanded: " << nodesExpanded << "\tIters: " << iters
-              //<< "\nBest move weight: " << maxWeight << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
-              << "\nMax visits: " << visitsOfBestNode << "(" << valueOfBestNode << "/" << visitsOfBestNode << ")"
+              << "\nBest move weight (max visited): " << 1.0 * valueOfBestNode / visitsOfBestNode << " (" << valueOfBestNode << "/" << visitsOfBestNode << ")"
+              // << "\nMax visits: " << visitsOfBestNode << " (" << valueOfBestNode << "/" << visitsOfBestNode << ")"
               << std::endl;
 
     return bestMove;
