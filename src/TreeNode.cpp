@@ -1,4 +1,5 @@
 #include "TreeNode.hpp"
+#include <cmath>
 
 void TreeNode::resetData(const Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget, TreeNode *parent){
     // clean and set some data to the given ones
@@ -57,7 +58,7 @@ void TreeNode::setValidMoves(){
                     if (board[r][c] != chessType_empty)
                         isHindered = true;
                     
-                    int moveCost = FIXED_COST + (r - i) + (c - j);
+                    int moveCost = FIXED_COST + std::abs(r - i) + std::abs(c - j);
                     if (board[r][c] == chessType_blackBarrier + opponentColor) // need to break opponent barrier
                         moveCost += OPPONENT_BARRIER_COST;
                     
@@ -84,7 +85,7 @@ void TreeNode::step(const Move& move){
 
     board[move.i1][move.j1] = chessType_empty;
     
-    selfBudget -= FIXED_COST + (move.i2 - move.i1) + (move.j2 - move.j1);
+    selfBudget -= FIXED_COST + std::abs(move.i2 - move.i1) + std::abs(move.j2 - move.j1);
 
     if (board[move.i2][move.j2] == chessType_blackBarrier + selfColor) // break self barrier
         selfBudget -= SELF_BARRIER_COST;
