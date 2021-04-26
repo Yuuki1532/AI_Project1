@@ -92,6 +92,8 @@ public:
         // auto bid_res = bid();
         // bool color_choice = bid_res.first;
         // int price = min(bid_res.second, MAX_PRICE);
+        // cout << "My bid: " << color_choice << " " << price << endl;
+
         // bool opponent_color_choice;
         // int opponent_price;
         // // color -> BLACK:0  WHITE:1
