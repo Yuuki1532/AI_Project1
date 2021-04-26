@@ -29,7 +29,7 @@ private:
     vector< vector<int> > board;
     int n_pieces[2] = {5, 5};
     int n_barriers[2] = {12, 12};
-    int budgets[2] = {150, 150};
+    int budgets[2] = {100, 100};
     bool color;
 
 public:
@@ -320,17 +320,38 @@ public:
         if (budgets[BLACK] <= 1 && budgets[WHITE] <= 1)
             game_over = 1;
     }
-
+    
     void terminate() {
-        if (board[0][4] == 3) cout << "BLACK wins!" << endl;
-        else if (board[8][4] == 4) cout << "WHITE wins!" << endl;
-        else if (n_pieces[BLACK] > n_pieces[WHITE]) cout << "BLACK wins!" << endl;
-        else if (n_pieces[BLACK] < n_pieces[WHITE]) cout << "WHITE wins!" << endl;
-        else if (n_barriers[BLACK] > n_barriers[WHITE]) cout << "BLACK wins!" << endl;
-        else if (n_barriers[BLACK] < n_barriers[WHITE]) cout << "WHITE wins!" << endl;
-        else cout << "Draw!" << endl;
+        if (board[0][4] == 3){
+            winner = BLACK;
+            cout << "BLACK wins!" << endl;
+        }
+        else if (board[8][4] == 4){
+            winner = WHITE;
+            cout << "WHITE wins!" << endl;
+        }
+        else if (n_pieces[BLACK] > n_pieces[WHITE]){
+            winner = BLACK;
+            cout << "BLACK wins!" << endl;
+        }
+        else if (n_pieces[BLACK] < n_pieces[WHITE]){
+            winner = WHITE;
+            cout << "WHITE wins!" << endl;
+        }
+        else if (n_barriers[BLACK] > n_barriers[WHITE]){
+            winner = BLACK;
+            cout << "BLACK wins!" << endl;
+        }
+        else if (n_barriers[BLACK] < n_barriers[WHITE]){
+            winner = WHITE;
+            cout << "WHITE wins!" << endl;
+        }
+        else{
+            winner = 2;
+            cout << "Draw!" << endl;
+        }
     }
-
+    
     void show_board() {
         cout << "--------------------------\n"
             << "Budget:\n"
@@ -362,12 +383,12 @@ public:
         cout << "--------------------------\n";
     }
 };
-
+int winner = -1;
 int main() {
     ios_base::sync_with_stdio(false);
 
     Meichu game;
     game.start();
-    system("PAUSE");
-    return 0;
+    // system("PAUSE");
+    return winner;
 }
