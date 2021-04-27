@@ -22,7 +22,7 @@ const string S[7] = {" ", "\u25b2", "\u25b3", "\u25cf", "\u25cb", "\u25a0", "\u2
 //                  // 0: empty, 1: black flag, 2: white flag, 3: black pieces,
 //                  // 4: white pieces, 5: black barriers, 6: white barriers
 
-
+int winner = -1;
 class Meichu {
 private:
     bool game_over = 0;
@@ -383,7 +383,7 @@ public:
         cout << "--------------------------\n";
     }
 };
-int winner = -1;
+
 int main() {
     ios_base::sync_with_stdio(false);
 
