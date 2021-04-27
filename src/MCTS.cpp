@@ -59,6 +59,10 @@ int SearchTree::expand(TreeNode *leaf) {
     // note: `validMoves` of `leaf` may be modified in this function
     // please enusre `validMoves` of `leaf` is set correctly before using
 
+    // if nodes have already expanded more than `nodes_limit`, stop expanding anymore
+    if (nodesExpanded >= limit_nodesLimit)
+        return 0;
+
     // set valid moves
     leaf->setValidMoves();
     

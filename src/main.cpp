@@ -29,7 +29,7 @@ private:
     vector< vector<int> > board;
     int n_pieces[2] = {5, 5};
     int n_barriers[2] = {12, 12};
-    int budgets[2] = {100, 100};
+    int budgets[2] = {100, 150};
     bool color;
 
 public:
