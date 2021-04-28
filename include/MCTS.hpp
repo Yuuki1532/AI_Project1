@@ -17,7 +17,7 @@ private:
 
     TreeNode *root;
     int nodesExpanded = 0;
-    const int limit_nodesLimit = 12000000; // nodes limit
+    const int limit_nodesLimit = 36000000; // nodes limit
 
     // random number generation related
     std::random_device rd;

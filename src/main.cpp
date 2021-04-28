@@ -29,7 +29,7 @@ private:
     vector< vector<int> > board;
     int n_pieces[2] = {5, 5};
     int n_barriers[2] = {12, 12};
-    int budgets[2] = {138, 150};
+    int budgets[2] = {146, 150};
     bool color;
 
 public:
@@ -78,7 +78,7 @@ public:
         //     cin >> ret[i];
         
         SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-        Move move = MCTS.search(15);
+        Move move = MCTS.search(30);
         return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
 
         // }
@@ -252,6 +252,10 @@ public:
         int distance = abs(begin_x-end_x) + abs(begin_y-end_y);
         if (who == BLACK) {
             budgets[BLACK] -= (1 + distance);
+            if (budgets[BLACK] < 0) {
+                cout << "Budget lower than 0." << endl;
+                exit(0);
+            }
             switch (board[end_x][end_y]) {
                 case 0:
                     break;
@@ -283,6 +287,10 @@ public:
             }
         } else {
             budgets[WHITE] -= (1 + distance);
+            if (budgets[WHITE] < 0) {
+                cout << "Budget lower than 0." << endl;
+                exit(0);
+            }
             switch (board[end_x][end_y]) {
                 case 0:
                     break;
