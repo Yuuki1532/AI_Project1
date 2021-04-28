@@ -204,8 +204,8 @@ Move SearchTree::search(int _timeLimit){
 
     // find the best node
     //double maxWeight = -1e9;
-    int valueOfBestNode = -1e9;
-    int visitsOfBestNode = -1e9;
+    long long valueOfBestNode = -1e9;
+    long long visitsOfBestNode = -1e9;
     Move bestMove;
 
     for (unsigned int i = 0; i < root->validMoves.size(); i++){

@@ -44,12 +44,12 @@ public:
     std::vector<TreeNode*> child; // child
     std::vector<Move> validMoves; // valid moves
     
-    int value; // value of the node
+    long long value; // value of the node
     // `value` of the node is w.r.t to `parent`
     // e.g. `value` = 10 implies
     // the value for `parent` to take a specific action thus reaching the node is 10
 
-    int visits; // visit count of the node
+    long long visits; // visit count of the node
     
 
     void setValidMoves();
