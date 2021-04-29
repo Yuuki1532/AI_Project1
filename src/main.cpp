@@ -29,7 +29,7 @@ private:
     vector< vector<int> > board;
     int n_pieces[2] = {5, 5};
     int n_barriers[2] = {12, 12};
-    int budgets[2] = {146, 150};
+    int budgets[2] = {150, 150};
     bool color;
 
 public:
@@ -78,7 +78,7 @@ public:
         //     cin >> ret[i];
         
         SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-        Move move = MCTS.search(30);
+        Move move = MCTS.search(15);
         return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
 
         // }

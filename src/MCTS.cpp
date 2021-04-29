@@ -169,7 +169,6 @@ SearchTree::~SearchTree(){
 
 Move SearchTree::search(int _timeLimit){
     // search for a best move with `_timeLimit` seconds limitation
-    // TODO
     auto startTime = std::chrono::steady_clock::now(); // start time
     std::chrono::seconds timeLimit(_timeLimit); // duration
     
@@ -182,7 +181,6 @@ Move SearchTree::search(int _timeLimit){
     }
 
     // simulate until time limit
-    //while (std::chrono::steady_clock::now() - startTime < timeLimit){
     while (1){
         if (iters % 10000 == 0)
             if (std::chrono::steady_clock::now() - startTime >= timeLimit)
@@ -203,20 +201,11 @@ Move SearchTree::search(int _timeLimit){
     }
 
     // find the best node
-    //double maxWeight = -1e9;
     long long valueOfBestNode = -1e9;
     long long visitsOfBestNode = -1e9;
     Move bestMove;
 
     for (unsigned int i = 0; i < root->validMoves.size(); i++){
-        //double currentWeight = 1.0 * root->child[i]->value / root->child[i]->visits;
-        
-        // if (currentWeight > maxWeight) {
-        //     maxWeight = currentWeight;
-        //     bestMove = root->validMoves[i];
-        //     valueOfBestNode = root->child[i]->value;
-        //     visitsOfBestNode = root->child[i]->visits;
-        // }
         if (root->child[i]->visits > visitsOfBestNode){
             bestMove = root->validMoves[i];
             visitsOfBestNode = root->child[i]->visits;
