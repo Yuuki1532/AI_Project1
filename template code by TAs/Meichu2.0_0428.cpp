@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "MCTS.hpp"
 
 #define BLACK 0
 #define WHITE 1
@@ -70,9 +69,10 @@ public:
         vector<int> ret(4, 0);
         if (who == color) {
             cout << "My move:\n";
-            SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-            Move move = MCTS.search(30);
-            return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
+            // Use AI to make decision !
+            // cin is only for testing !
+            for (int i = 0; i < 4; ++i)
+                cin >> ret[i]; 
         }
         return ret;
     }

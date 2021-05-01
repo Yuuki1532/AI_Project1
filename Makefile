@@ -9,7 +9,6 @@ OBJS = $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SRCS))
 
 CC = g++
 CFLAGS = -std=c++14 -Wall -O3
-LIBS = -lm
 
 .PHONY: all clean
 
@@ -19,7 +18,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 $(OBJ)/%.o: $(SRC)/%.cpp
-	$(CC) $(CFLAGS) -I$(INCLUDE) $(LIBS) -c -o $@ $<
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c -o $@ $<
 
 clean:
 	rm -f $(OBJS) $(TARGET)
