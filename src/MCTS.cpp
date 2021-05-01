@@ -29,9 +29,6 @@ SearchTree::SearchTree(const std::vector<std::vector<int> >& board, const int se
 double SearchTree::getTreeNodeWeight(const TreeNode* const& treeNode) const{
     // calculate the weight of `treeNode` for selection
     // weights are calculated by UCB1 formula
-
-    if (treeNode->visits == 0)
-        return std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits));
     return 1.0 * treeNode->value / treeNode->visits + std::sqrt(2) * std::sqrt(std::log(treeNode->parent->visits) / treeNode->visits);
 }
 
@@ -198,7 +195,7 @@ Move SearchTree::search(const int _timeLimit){
         iters++;
 
         auto leaf = select();
-        if (leaf->visits > 0){ // visited, expand it and randomly pick one of its child if any
+        if (leaf->visits > 1){ // visited, expand it and randomly pick one of its child if any
             if (expand(leaf) > 0){
                 int randomIndex = randomInt(0, leaf->child.size() - 1);
                 leaf = leaf->child[randomIndex];

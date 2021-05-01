@@ -16,7 +16,7 @@ void TreeNode::resetData(const Board& board, const int selfColor, const int oppo
     this->selfBudget = selfBudget;
     this->opponentBudget = opponentBudget;
     this->parent = parent;
-    this->visits = 0;
+    this->visits = 1;
     this->value = 0;
     this->child.clear();
 
