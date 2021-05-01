@@ -175,8 +175,8 @@ SearchTree::~SearchTree(){
 
 Move SearchTree::search(const int _timeLimit){
     // search for a best move with `_timeLimit` seconds limitation
-    auto startTime = std::chrono::steady_clock::now(); // start time
-    std::chrono::seconds timeLimit(_timeLimit); // duration
+    const auto startTime = std::chrono::steady_clock::now(); // start time
+    const std::chrono::seconds timeLimit(_timeLimit); // duration
     
     nodesExpanded = 0;
     int iters = 0;

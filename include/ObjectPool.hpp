@@ -18,7 +18,7 @@ public:
     ObjectPool(){
         // create initial objects for pool
         // time the initialization
-        auto startTime = std::chrono::steady_clock::now(); // start time
+        const auto startTime = std::chrono::steady_clock::now(); // start time
         for (int i = 0; i < initObjCount; i++){
             pool.push(new T());
         }
