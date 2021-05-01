@@ -78,7 +78,7 @@ public:
         //     cin >> ret[i];
         
         SearchTree MCTS(board, who, (int) !who, budgets[who], budgets[(int) !who]);
-        Move move = MCTS.search(15);
+        Move move = MCTS.search(30);
         return std::vector<int> {move.i1, move.j1, move.i2, move.j2};
 
         // }

@@ -1,7 +1,7 @@
 #include "TreeNode.hpp"
 #include <cmath>
 
-void TreeNode::resetData(const Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget, TreeNode *parent){
+void TreeNode::resetData(const Board& board, const int selfColor, const int opponentColor, const int selfBudget, const int opponentBudget, TreeNode* const parent){
     // clean and set some data to the given ones
     // designed to be called once after reuse an instance from the object pool
     

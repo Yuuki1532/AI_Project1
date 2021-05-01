@@ -28,14 +28,14 @@ const std::pair<int, int> chess_moveDirection[] = {{0, -1}, {0, 1}, {-1, 0}, {1,
 struct Move{
     int i1, j1, i2, j2; // // (i1, j1): old position, (i2, j2): new position
     Move(){}
-    Move(int i1, int j1, int i2, int j2): i1(i1), j1(j1), i2(i2), j2(j2){}
+    Move(const int i1, const int j1, const int i2, const int j2): i1(i1), j1(j1), i2(i2), j2(j2){}
 };
 
-typedef std::vector<std::vector<int> > Board;
+typedef int Board[BOARD_SIZE][BOARD_SIZE];
 
 class TreeNode{
 public:
-    Board board = Board(BOARD_SIZE, std::vector<int>(BOARD_SIZE, 0));
+    Board board;
     
     int selfBudget, opponentBudget;
     int selfColor, opponentColor;
@@ -57,7 +57,7 @@ public:
     int getWinner() const;
     
 
-    void resetData(const Board&, int, int, int, int, TreeNode*);
+    void resetData(const Board&, const int, const int, const int, const int, TreeNode* const);
     
 };
 

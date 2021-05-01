@@ -5,14 +5,23 @@
 #include <iomanip>
 #include <string>
 
-SearchTree::SearchTree(Board& board, int selfColor, int opponentColor, int selfBudget, int opponentBudget){
+SearchTree::SearchTree(const std::vector<std::vector<int> >& board, const int selfColor, const int opponentColor, const int selfBudget, const int opponentBudget){
     // TODO: ask TAs for RAM limitation in execute environment
     // assume we cannot occupied large memory when idling
     // we must build the object pool here
     
     // first create root node according to the given game status (parameters)
     root = pool.pop();
-    root->resetData(board, selfColor, opponentColor, selfBudget, opponentBudget, nullptr);
+
+    // create a 2d int array for resetData()
+    int tmpBoard[BOARD_SIZE][BOARD_SIZE];
+    for (int i = 0; i < BOARD_SIZE; i++){
+        for (int j = 0; j < BOARD_SIZE; j++){
+            tmpBoard[i][j] = board[i][j];
+        }
+    }
+
+    root->resetData(tmpBoard, selfColor, opponentColor, selfBudget, opponentBudget, nullptr);
     
     return;
 }
@@ -54,7 +63,7 @@ TreeNode* SearchTree::select() const{
     return current;
 }
 
-int SearchTree::expand(TreeNode *leaf) {
+int SearchTree::expand(TreeNode* const& leaf) {
     // expand `leaf` by calling its `setValidMoves()` several times
     // note: `validMoves` of `leaf` may be modified in this function
     // please enusre `validMoves` of `leaf` is set correctly before using
@@ -88,7 +97,7 @@ int SearchTree::expand(TreeNode *leaf) {
     return leaf->validMoves.size();
 }
 
-int SearchTree::rollout(TreeNode* leaf){
+int SearchTree::rollout(const TreeNode* const& leaf){
     // rollout `leaf` and return the winner
 
     // make a copy of `leaf` for simulation
@@ -124,7 +133,7 @@ int SearchTree::rollout(TreeNode* leaf){
     return -1; // error (to avoid having a servere runtime error, we treat this unexpected error as draw)
 }
 
-void SearchTree::update(TreeNode* current, int winner){
+void SearchTree::update(TreeNode* const& current, const int winner){
     // backpropagate the (rollout) result
     // please refer to `TreeNode` for what `value` of `leaf` means and how it is calculated
 
@@ -153,9 +162,9 @@ void SearchTree::update(TreeNode* current, int winner){
     return;
 }
 
-void SearchTree::recycleTreeNodes(TreeNode *node){
+void SearchTree::recycleTreeNodes(TreeNode* const& node){
     // push the whole tree nodes used back to the pool by DFS traversal
-    for (auto c: node->child){
+    for (const auto& c: node->child){
         recycleTreeNodes(c);
     }
     pool.push(node);
@@ -167,7 +176,7 @@ SearchTree::~SearchTree(){
     return;
 }
 
-Move SearchTree::search(int _timeLimit){
+Move SearchTree::search(const int _timeLimit){
     // search for a best move with `_timeLimit` seconds limitation
     auto startTime = std::chrono::steady_clock::now(); // start time
     std::chrono::seconds timeLimit(_timeLimit); // duration

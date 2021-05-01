@@ -11,8 +11,8 @@
 template <class T>
 class ObjectPool{
 public:
-    static const int initObjCount = 8000000; // initial object count 8M
-    static const int augObjCount = 1000000; // object count for every augmentation 1M
+    static const int initObjCount = 8000000; // initial object count
+    static const int augObjCount = 2000000; // object count for every augmentation
     std::stack<T*> pool;
     
     ObjectPool(){
@@ -51,7 +51,7 @@ public:
         return obj;
     }
 
-    void push(T* obj){
+    void push(T* const& obj){
         pool.push(obj);
         return;
     }

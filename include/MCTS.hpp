@@ -6,9 +6,9 @@
 
 class SearchTree{
 public:
-    SearchTree(Board&, int, int, int, int);
+    SearchTree(const std::vector<std::vector<int> >&, const int, const int, const int, const int);
 
-    Move search(int);
+    Move search(const int);
 
     ~SearchTree();
 
@@ -17,7 +17,7 @@ private:
 
     TreeNode *root;
     int nodesExpanded = 0;
-    const int limit_nodesLimit = 12000000; // nodes limit
+    const int limit_nodesLimit = 1e9; // nodes limit
 
     // random number generation related
     std::random_device rd;
@@ -26,13 +26,13 @@ private:
     int randomInt(const int, const int);
 
     double getTreeNodeWeight(const TreeNode* const&) const; // selection strategy
-    void recycleTreeNodes(TreeNode*);
+    void recycleTreeNodes(TreeNode* const&);
 
     // MCTS operations
     TreeNode* select() const;
-    int expand(TreeNode*);
-    int rollout(TreeNode*);
-    void update(TreeNode*, int);
+    int expand(TreeNode* const&);
+    int rollout(const TreeNode* const&);
+    void update(TreeNode* const&, const int);
 };
 
 #endif
